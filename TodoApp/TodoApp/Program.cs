@@ -39,13 +39,13 @@ namespace TodoApp
         private static void RemoveNthTask(string nth)                         // should it have an int az input parameter? it would make more sense - DEMO material?
         {
             string path = @"../../../../tasks.txt";
-            string[] content = File.ReadAllLines(path);
+            string[] fileContent = File.ReadAllLines(path);
 
-            if (content.Length >= 2)
+            if (fileContent.Length >= 2)
             {
                 int index;                                                              
                 int.TryParse(nth, out index);                                  // simple Parse might be enough -- or use the bool it gives
-                List<string> newTaskList = content.ToList();
+                List<string> newTaskList = fileContent.ToList();
                 newTaskList.RemoveAt(index - 1);                                // if var is called index, it should be index, not index+1...
 
                 using (StreamWriter writer = new StreamWriter(path))
@@ -79,16 +79,16 @@ namespace TodoApp
            string path = @"../../../../tasks.txt";
             try
             {
-                string[] content = File.ReadAllLines(path);
-                if (content.Length == 0)
+                string[] fileContent = File.ReadAllLines(path);
+                if (fileContent.Length == 0)
                 {
                     Console.WriteLine("No todos for today! :)");
                 }
                 else
                 {
-                    for (int i = 0; i < content.Length; i++)
+                    for (int i = 0; i < fileContent.Length; i++)
                     {
-                        Console.WriteLine("{0} - {1}", i + 1, content[i]);
+                        Console.WriteLine("{0} - {1}", i + 1, fileContent[i]);
                     }
                 }
             }
