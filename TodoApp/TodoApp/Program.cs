@@ -34,11 +34,18 @@ namespace TodoApp
 
         private static void AddNewTask(string[] newTask)
         {
+            if (newTask.Length == 1)
+            {
+                Console.WriteLine("Unable to add: no task provided.");
+            }
+            else
+            {
                 string path = @"../../../../tasks.txt";                                 // source .txt file could go up?
                 using (StreamWriter writer = File.AppendText(path))
                 {
                     writer.WriteLine(newTask[1]);
                 }
+            }
         }
 
         private static void ListTasks()
