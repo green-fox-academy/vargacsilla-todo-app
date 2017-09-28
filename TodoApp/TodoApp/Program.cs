@@ -25,9 +25,16 @@ namespace TodoApp
                 try
                 {
                     string[] content = File.ReadAllLines(path);
-                    for (int i = 0; i < content.Length; i++)
+                    if (content.Length == 0)
                     {
-                        Console.WriteLine("{0} - {1}", i + 1, content[i]);
+                        Console.WriteLine("No todos for today! :)");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < content.Length; i++)
+                        {
+                            Console.WriteLine("{0} - {1}", i + 1, content[i]);
+                        }
                     }
                 }
                 catch (Exception)
