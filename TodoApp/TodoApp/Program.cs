@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace TodoApp
 {
@@ -11,7 +13,32 @@ namespace TodoApp
         static void Main(string[] args)
         {
             PrintUsage();
+            ListTasks(args.Contains("-l"));
             Console.ReadLine();
+        }
+
+        private static void ListTasks(bool rightCommand)
+        {
+            if (rightCommand)
+            {
+                string path = @"../../../../tasks.txt";
+                try
+                {
+                    string[] content = File.ReadAllLines(path);
+                    for (int i = 0; i < content.Length; i++)
+                    {
+                        Console.WriteLine("{0} - {1}", i + 1, content[i]);
+                    }
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Uh-oh, could not read the file!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Unsupported argument");
+            }
         }
 
         private static void PrintUsage()
