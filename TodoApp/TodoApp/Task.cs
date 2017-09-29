@@ -28,7 +28,6 @@ namespace TodoApp
             }
             return string.Concat(checkbox, description);
             //Console.WriteLine(checkbox, description);
-
         }
     }
 }
