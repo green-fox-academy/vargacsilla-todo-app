@@ -10,15 +10,22 @@ namespace TodoApp
 {
     class Program
     {
+        static string path = @"../../../../tasks.txt";
+        static string[] fileContent = File.ReadAllLines(path);
+        static string done = "[x]";
+
         static void Main(string[] args)
         {
+            var todoList = new TodoList();
+
             if (args.Length == 0)
             {
                 PrintUsage();
             }
-            else if (args.Contains("-l"))
+
+            else if (args.Contains("-l"))                                           // enum ?
             {
-                ListTasks();
+                todoList.ListTasks();
             }
             else if (args.Contains("-a"))
             {
@@ -28,19 +35,36 @@ namespace TodoApp
             {
                 RemoveNthTask(args[1]);
             }
+            else if (args.Contains("-c"))
+            {
+                CheckTask(args[1]);
+            }
             else
             {
-                Console.WriteLine("\nUnsupported argument. Try the following:");
+                Console.WriteLine("Unsupported argument. Try the following:");
                 PrintCommands();
             }
             Console.ReadLine();
         }
 
+        private static void CheckTask(string nth)
+        {
+            int index = int.Parse(nth);
+            //int.TryParse(nth, out index);
+            
+            if (fileContent[index-1].Substring(0, 2) != "[x]")
+            {
+                fileContent[index - 1] = string.Concat(done, fileContent[index - 1].Substring(3));
+                File.WriteAllLines(path, fileContent);
+            }
+            else
+            {
+                Console.WriteLine("Task list is too short.");            
+            }
+        }
+
         private static void RemoveNthTask(string nth)                         // should it have an int az input parameter? it would make more sense - DEMO material?
         {
-            string path = @"../../../../tasks.txt";
-            string[] fileContent = File.ReadAllLines(path);
-
             if (fileContent.Length >= 2)
             {
                 int index;                                                              
@@ -48,53 +72,24 @@ namespace TodoApp
                 List<string> newTaskList = fileContent.ToList();
                 newTaskList.RemoveAt(index - 1);                                // if var is called index, it should be index, not index+1...
 
-                using (StreamWriter writer = new StreamWriter(path))
-                {
-                    foreach (var newTask in newTaskList)
-                    {
-                        writer.WriteLine(newTask);
-                    }
-                }
+                File.WriteAllLines(path, newTaskList);
             }
         }
 
         private static void AddNewTask(string[] newTask)
         {
+            //var task = new Task(newTask[1]);
+
             if (newTask.Length == 1)
             {
                 Console.WriteLine("Unable to add: no task provided.");
             }
             else
             {
-                string path = @"../../../../tasks.txt";                                 // source .txt file could go up?
                 using (StreamWriter writer = File.AppendText(path))
                 {
-                    writer.WriteLine(newTask[1]);
+                    writer.WriteLine("[ ] " + newTask[1]);
                 }
-            }
-        }
-
-        private static void ListTasks()
-        {
-           string path = @"../../../../tasks.txt";
-            try
-            {
-                string[] fileContent = File.ReadAllLines(path);
-                if (fileContent.Length == 0)
-                {
-                    Console.WriteLine("No todos for today! :)");
-                }
-                else
-                {
-                    for (int i = 0; i < fileContent.Length; i++)
-                    {
-                        Console.WriteLine("{0} - {1}", i + 1, fileContent[i]);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Uh-oh, could not read the file!");
             }
         }
 
